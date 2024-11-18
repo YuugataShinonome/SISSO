@@ -24,6 +24,37 @@ Features
 
 Installation
 ------------
+
+For anyone who wants to compile and run this on Debian12, here are some instructions:
+
+First, run the following commands to add Intel OneAPI toolchain APT repos:
+```shell
+wget -O- https://apt.repos.intel.com/intel-gpg-keys/GPG-PUB-KEY-INTEL-SW-PRODUCTS.PUB | gpg --dearmor | sudo tee /usr/share/keyrings/oneapi-archive-keyring.gpg > /dev/null
+echo "deb [signed-by=/usr/share/keyrings/oneapi-archive-keyring.gpg] https://apt.repos.intel.com/oneapi all main" | sudo tee /etc/apt/sources.list.d/oneAPI.list
+```
+
+Then install necessary packages:
+```shell
+sudo apt update
+sudo apt install intel-oneapi-compiler-fortran intel-oneapi-mkl intel-oneapi-mpi-devel
+```
+
+Then run the following commands to compile:
+```shell
+mkdir build
+cd src
+source /opt/intel/oneapi/setvars.sh
+mpiifx -O2 var_global.f90 libsisso.f90 DI.f90 FC.f90 FCse.f90 SISSO.f90 -o ../build/SISSO
+cd ..
+```
+Please note that since release 2025 `mpiifort` is no longer avalible and you need to replace it with `mpiifx`.
+It's the new compiler.
+
+Now copy run the excutable under `build` or just copy it to `/usr/local/bin`:
+```shell
+sudo install -m755 build/SISSO /usr/local/bin
+```
+
 A Fortran mpi compiler is required to compile the SISSO parallel program. Below are two options for compiling the program using an IntelMPI compiler (other compilers may work as well). In the folder 'src', do:    
 (1)  mpiifort -fp-model precise var_global.f90 libsisso.f90 DI.f90 FC.f90 FCse.f90 SISSO.f90 -o ~/bin/SISSO    
 (2)  mpiifort -O2 var_global.f90 libsisso.f90 DI.f90 FC.f90 FCse.f90 SISSO.f90 -o ~/bin/SISSO    
