@@ -36,7 +36,7 @@ echo "deb [signed-by=/usr/share/keyrings/oneapi-archive-keyring.gpg] https://apt
 Then install necessary packages:
 ```shell
 sudo apt update
-sudo apt install intel-oneapi-compiler-fortran intel-oneapi-mkl intel-oneapi-mpi-devel
+sudo apt install intel-oneapi-compiler-fortran-2024.2 intel-oneapi-mkl-2024.2 intel-oneapi-mpi-devel-2021.14
 ```
 
 Then run the following commands to compile:
@@ -44,11 +44,12 @@ Then run the following commands to compile:
 mkdir build
 cd src
 source /opt/intel/oneapi/setvars.sh
-mpiifx -O2 var_global.f90 libsisso.f90 DI.f90 FC.f90 FCse.f90 SISSO.f90 -o ../build/SISSO
+mpiifort -O2 var_global.f90 libsisso.f90 DI.f90 FC.f90 FCse.f90 SISSO.f90 -o ../build/SISSO
 cd ..
 ```
-Please note that since release 2025 `mpiifort` is no longer avalible and you need to replace it with `mpiifx`.
-It's the new compiler.
+~~Please note that since release 2025 `mpiifort` is no longer avalible and you need to replace it with `mpiifx`.
+It's the new compiler.~~
+Please note that use `mpiifx` will trigger a bug. Just use `mpiifort`.
 
 Now copy run the excutable under `build` or just copy it to `/usr/local/bin`:
 ```shell
